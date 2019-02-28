@@ -6,9 +6,23 @@ module.exports .dbSchema = `CREATE TABLE IF NOT EXISTS Users (
         first_name text,
         last_name text
     );
-    CREATE TABLE IF NOT EXISTS event (
+    CREATE TABLE IF NOT EXISTS challenge (
         id integer NOT NULL PRIMARY KEY,
-        user_id integer NOT NULL UNIQUE,
-        event_name text NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES Users(id)
-    );`
+        challenge_name text NOT NULL,
+        start_date datetime NOT NULL,
+        end_date datetime NOT NULL,
+        hashtags_ids NOT NULL, 
+        description text          
+    );
+    CREATE TABLE IF NOT EXISTS challenge_users (
+        user_id integer not null, 
+        challenge_id integer not null,
+        points integer,
+        FOREIGN KEY (user_id) REFERENCES Users(id)
+
+   );
+   CREATE TABLE IF NOT EXISTS hashtags (
+        hashtag_id integer not null,
+        hashtag_name text not null
+   );`
+
