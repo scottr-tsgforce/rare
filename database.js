@@ -28,9 +28,9 @@ function DatabaseAPI(db_path, dbSchema){
         }
     });
 	return {
-		registerUser: function(email, first_name,last_name){
-			var sql = "INSERT INTO Users(email, first_name,last_name) VALUES (?, ?,?)"
-			DB.run(sql,[email, first_name,last_name], function(error){
+		registerUser: function(email, first_name,last_name, instagram_handle){
+			var sql = "INSERT INTO Users(email, first_name,last_name, instagram_handle) VALUES (?, ?,?, ?)"
+			DB.run(sql,[email, first_name,last_name,instagram_handle], function(error){
 				if(error){
 					console.log(error)
 				}else{
@@ -120,7 +120,6 @@ function DatabaseAPI(db_path, dbSchema){
 				}
 			});
 		},
-
 
 		findHastagById:  function(hashtagId, _callback) { 
 		    var sql = 'SELECT * '
