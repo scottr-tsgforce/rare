@@ -20,9 +20,7 @@ module.exports .dbSchema = `CREATE TABLE IF NOT EXISTS Users (
     CREATE TABLE IF NOT EXISTS challenge_users (
         user_id integer not null, 
         challenge_id integer not null,
-        points integer,
-        FOREIGN KEY (user_id) REFERENCES Users(id)
-
+        points integer
    );
    CREATE TABLE IF NOT EXISTS hashtags (
         hashtag_id integer not null,
