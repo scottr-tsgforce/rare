@@ -4,14 +4,17 @@ module.exports .dbSchema = `CREATE TABLE IF NOT EXISTS Users (
         id integer NOT NULL PRIMARY KEY,    
         email text NOT NULL UNIQUE,
         first_name text,
-        last_name text
+        last_name text,
+        instagram_handle text
     );
     CREATE TABLE IF NOT EXISTS challenge (
         id integer NOT NULL PRIMARY KEY,
         challenge_name text NOT NULL,
         start_date datetime NOT NULL,
         end_date datetime NOT NULL,
-        hashtags_ids NOT NULL, 
+        hashtags_ids NOT NULL,
+        rules text, #ex:photo or video
+        points integer, 
         description text          
     );
     CREATE TABLE IF NOT EXISTS challenge_users (

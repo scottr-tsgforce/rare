@@ -55,7 +55,7 @@ app.get('/getHashtagById', function(req,res,next){
 });
 app.post('/addUsers', function(req, res){
 	console.log(req);
-    DB.registerUser(req.query.email, req.query.first_name, req.query.last_name);
+    DB.registerUser(req.query.email, req.query.first_name, req.query.last_name,req.query.instagramHandle);
     res.send("added user!");
 });
 
@@ -64,6 +64,7 @@ app.post('/addChallenge', function(req, res){
     DB.addChallenge(req.query.id,req.query.challengeName, req.query.startDate, req.query.endDate,req.query.hashtagId, req.query.description);
     res.send("added challenge!");
 });
+
 app.post('/addHashtag', function(req, res){
 	console.log(req);
     DB.addHashtag(req.query.id,req.query.hashtag_name);
@@ -78,4 +79,6 @@ app.post('/addUserToChallenge', function(req, res){
     res.send("connected user to a challenge!");
 });
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000, function(){
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+});
