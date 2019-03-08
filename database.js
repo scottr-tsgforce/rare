@@ -28,9 +28,9 @@ function DatabaseAPI(db_path, dbSchema){
         }
     });
 	return {
-		registerUser: function(email, first_name,last_name, instagram_handle){
-			var sql = "INSERT INTO Users(email, first_name,last_name, instagram_handle) VALUES (?, ?,?, ?)"
-			DB.run(sql,[email, first_name,last_name,instagram_handle], function(error){
+		registerUser: function(email, first_name,last_name, dob, gender, instagram_handle){
+			var sql = "INSERT INTO Users(email, first_name, last_name, dob, gender, instagram_handle) VALUES (?, ? ,?, ?, ?, ?)"
+			DB.run(sql,[email, first_name,last_name,dob, gender, instagram_handle], function(error){
 				if(error){
 					console.log(error)
 				}else{
@@ -41,7 +41,7 @@ function DatabaseAPI(db_path, dbSchema){
 
 		},
 		findUserByLogin: function(email, _callback) { 
-		    var sql = 'SELECT first_name, last_name '
+		    var sql = 'SELECT * '
 		    sql += 'FROM Users '
 		    sql += 'WHERE email = ? '
 		 
@@ -55,7 +55,7 @@ function DatabaseAPI(db_path, dbSchema){
 	        });
 		},
 		findAllUsers: function(_callback) { 
-		    var sql = 'SELECT id, email, first_name, last_name '
+		    var sql = 'SELECT * '
 		    sql += 'FROM Users '
 		 
 		    DB.all(sql, function(error, row) {
@@ -67,9 +67,9 @@ function DatabaseAPI(db_path, dbSchema){
 	            _callback(error,row)
 	        });
 		},
-		addChallenge: function(id, name, startDate, endDate, hashtagId, description){
-			var sql = "INSERT INTO challenge(id, challenge_name, start_date, end_date, hashtags_ids, description) VALUES (?, ?,?,?,?,?)"
-			DB.run(sql,[id, name, startDate, endDate, hashtagId, description], function(error){
+		addChallenge: function(challenge_name, start_date, end_date, created_timestamp, active, hashtags_ids, media_type, multiplier,description){
+			var sql = "INSERT INTO challenge(challenge_name, start_date, end_date, created_timestamp, active, hashtags_ids, media_type, multiplier,description) VALUES (?,?,?,?,?,?,?,?,?)"
+			DB.run(sql,[challenge_name, start_date, end_date, created_timestamp, active, hashtags_ids, media_type, multiplier,description], function(error){
 				if(error){
 					console.log(error)
 				}else{
@@ -79,12 +79,12 @@ function DatabaseAPI(db_path, dbSchema){
 			});
 
 		},
-		findChallengeById: function(id, _callback) { 
-		    var sql = 'SELECT id, challenge_name, start_date, end_date, hashtags_ids, description '
+		findChallengeByName: function(challenge_name, _callback) { 
+		    var sql = 'SELECT * '
 		    sql += 'FROM challenge '
-		    sql += 'WHERE id = ? '
+		    sql += 'WHERE challenge_name = ? '
 		 
-		    DB.all(sql, id, function(error, row) {
+		    DB.all(sql, challenge_name, function(error, row) {
 	            if (error) {
 	                console.log(error)
 	                return
@@ -94,7 +94,7 @@ function DatabaseAPI(db_path, dbSchema){
 	        });
 		},
 		findUsersByChallengeId:  function(challengeId, _callback) { 
-		    var sql = 'SELECT Users.id,Users.email, Users.first_name, Users.last_name '
+		    var sql = 'SELECT *, id as challenge_users_id '
 		    sql += 'FROM challenge_users, Users '
 		    sql += 'WHERE Users.id = challenge_users.user_id AND challenge_users.challenge_id = ? '
 		 
@@ -107,9 +107,9 @@ function DatabaseAPI(db_path, dbSchema){
 	            _callback(error,row)
 	        });
 		},
-		addUserToChallenge: function(userId, challengeId) { 
+		addUserToChallenge: function(userId, challengeId, total_points, user_media) { 
 
-		    var sql = 'INSERT INTO CHALLENGE_USERS(user_id, challenge_id, points) VALUES(?,?, 5) '
+		    var sql = 'INSERT INTO CHALLENGE_USERS(user_id, challenge_id, total_points, user_media) VALUES(?,?, ?,?) '
 		  
 	        DB.run(sql, [userId, challengeId], function(error){
 				if(error){
@@ -124,7 +124,7 @@ function DatabaseAPI(db_path, dbSchema){
 		findHastagById:  function(hashtagId, _callback) { 
 		    var sql = 'SELECT * '
 		    sql += 'FROM hashtags '
-		    sql += 'WHERE hashtag_id = ?'
+		    sql += 'WHERE id = ?'
 		 
 		    DB.all(sql, hashtagId, function(error, row) {
 	            if (error) {
@@ -135,11 +135,11 @@ function DatabaseAPI(db_path, dbSchema){
 	            _callback(error,row)
 	        });
 		},
-		addHashtag: function(id, hashtag_name) { 
+		addHashtag: function(hashtag_name, points) { 
 
-		    var sql = 'INSERT INTO hashtags (HASHTAG_ID, hashtag_name) VALUES(?,?) '
+		    var sql = 'INSERT INTO hashtags(hashtag_name, points) VALUES(?,?) '
 		  
-	        DB.run(sql, [id, hashtag_name], function(error){
+	        DB.run(sql, [hashtag_name, points], function(error){
 				if(error){
 					console.log(error)
 				}else{
@@ -147,7 +147,35 @@ function DatabaseAPI(db_path, dbSchema){
 					console.log("# of row changes" + this.changes)
 				}
 			});
-		}
+		},
+
+		updateStatus: function(challenge_name){
+			var sql = "UPDATE challenge SET active = CASE "+
+				"WHEN active = 1 THEN 0 ELSE 1 END " +
+				"WHERE challenge_name = ?"
+
+			DB.run(sql, challenge_name, function(error){
+				if(error){
+					console.log(error)
+				}else{
+					console.log("Id:" +this.lastID)
+					console.log("# of row changes" + this.changes)
+				}
+			});
+		},
+		findAllChallenges: function( _callback) { 
+		    var sql = 'SELECT *'
+		    sql += 'FROM challenge '
+		 
+		    DB.all(sql, function(error, row) {
+	            if (error) {
+	                console.log(error)
+	                return
+	            }
+	           
+	            _callback(error,row)
+	        });
+		},
 	
 	}
 	// db.close()
