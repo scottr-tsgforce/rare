@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Create New Challenge</h2>
+
+<form>
+  Challenge Name:<br>
+  <input type="text" name="challengeName">
+  <br>
+  Start Date:<br>
+  <input type="text" name="startDate">
+  <br>
+  End Date:<br>
+  <input type="text" name="endDate">
+  <br>
+  Hashtag:<br>
+  <input type="text" name="hashtagId">
+  <br>
+  Media Type:<br>
+  <input type="text" name="mediaType">
+  <br>
+  Challenge Description:<br>
+  <input type="text" name="challengeDescription">
+  <br>
+  Create Timestamp:<br>
+  <input type="text" name="createdTimestamp">
+  <br>
+</form>
+
+<br><br>
+<input type="submit" value="Add Challenge">
+<script type="text/javascript">
+	$.post(URL/addChallenge, {challengeName, startDate,endDate,hashtagId, mediaType, challengeDescription, createdTimestamp},function(data, status){
+		alert("Go all challenges data!");
+	});
+
+</script>
+</body>
+</html>
