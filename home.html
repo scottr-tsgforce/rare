@@ -10,42 +10,22 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="home.css">
-
+   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 
     <title>Title Page</title>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Swarm</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Challenges</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-      
-    </ul>
-
-  </div>
-</nav>
-
   </head>
+    </head>
+   <div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="#">About</a>
+  <a href="addChallenge.html">Add Challenge</a>
+
+	</div>
+	<span onclick="openNav()">&#9776; <!-- Results in ☰ -->
+</span>
+
+
 
 
   <body>
@@ -53,9 +33,20 @@
     <h2>Here are a list of challenges:</h2>
 
     <script type="text/javascript">
-    	$.get("https://sleepy-dawn-84485.herokuapp.com/getAllChallenges", function(data, status){
-    		alert("Go all challenges data!");
-    	});
+    	// $.get("https://sleepy-dawn-84485.herokuapp.com/getAllChallenges", function(data, status){
+    	// 	alert("Go all challenges data!");
+    	// });
+
+    	$.ajax({
+    type: 'GET',
+    url: 'https://sleepy-dawn-84485.herokuapp.com/getAllChallenges',
+    dataType: 'jsonp',
+    crossDomain: true,
+    data: jsonData,
+    success: function() { console.log(jsonData) },
+    error: function() { alert("Error"); }
+});
+    	
 
     </script>
 
@@ -98,13 +89,16 @@
   </body>
 
   <script>
-  	function openNav(){
-	document.getElementById("mySidepanel").style.width = "250px";
-	}
+  	/* Set the width of the side navigation to 250px */
+  	function openNav() {
+  	  document.getElementById("mySidenav").style.width = "250px";
+  	}
 
-	function closeNav(){
-		document.getElementById("mySidepanel").style.width = "0";
-	}
-  </script>
+  	/* Set the width of the side navigation to 0 */
+  	function closeNav() {
+  	  document.getElementById("mySidenav").style.width = "0";
+  	}
+	
+	</script>
 </html>
 
